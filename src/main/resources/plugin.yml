@@ -1,0 +1,8 @@
+name: Bounties
+version: @version@
+main: com.noahverkaik.bounties.Bounties
+api-version: 1.16
+authors: [Nowaha]
+website: www.noahverkaik.com
+commands:
+  addbounty:
