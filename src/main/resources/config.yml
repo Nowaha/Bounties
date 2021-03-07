@@ -1,0 +1,4 @@
+bounty:
+  type: DIAMOND
+  amount: 64
+claim-every: 1800000 #ms

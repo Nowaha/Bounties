@@ -1,0 +1,20 @@
+commands:
+  added-bounty: "&aAdded bounty to %player%."
+  enabled-bounties: "&aEnabled bounties."
+  disabled-bounties: "&cDisabled bounties."
+  error:
+    player-not-found: "&cThat player could not be found."
+    bounties-are-disabled: "&cBounties are disabled."
+    cannot-use: "&cYou can not use this command."
+
+player:
+  bountied: "&b&lYou have been bountied!"
+  lost-bounty: "&cYou lost your bounty for killing a bountied player while bountied."
+  bountied-prefix:
+    chat: "&b&l[B]"
+    tab: "&b&lBOUNTIED"
+
+broadcast:
+  bountied: "&b&l%player% now has a bounty on their head!"
+  claimed: "&b&l%killer% claimed %target%'s bounty!"
+  claimed-too-recently: "&b&l%killer% removed %target%'s bounty! &b&o(no rewards)"

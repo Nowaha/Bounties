@@ -6,3 +6,5 @@ authors: [Nowaha]
 website: www.noahverkaik.com
 commands:
   addbounty:
+  startbounty:
+  stopbounty:

@@ -1,10 +1,22 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
-plugins {
-    id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.0-M1'
-    id ''
+buildscript {
+    ext.kotlin_version = '1.4.31'
+    repositories {
+        jcenter()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    }
+
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
 }
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'kotlin'
 
 group = 'com.noahverkaik'
 version = '1.0'
@@ -22,11 +34,16 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
+    maven {
+        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
 }
 
 dependencies {
+    compileOnly 'me.clip:placeholderapi:2.10.9'
     compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
 processResources {
@@ -45,13 +62,4 @@ compileTestKotlin {
     }
 }
 
-task copyJarToBin {
-    doLast {
-        copy {
-            from 'build/libs/Bounties-1.0.jar'
-            into "C:/Users/Noah/Documents/Minecraft Servers/Paper 1.16.5/plugins"
-        }
-    }
-}
-
-jar.dependsOn(copyJarToBin)
+tasks.build.dependsOn tasks.shadowJar
