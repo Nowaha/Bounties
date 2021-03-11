@@ -1,4 +1,4 @@
 bounty:
-  type: DIAMOND
-  amount: 64
+  - eco give %player% 1000
+  - say %player% got 1000$ for killing %target%.
 claim-every: 1800000 #ms

@@ -8,12 +8,9 @@ import com.noahverkaik.bounties.events.BountyEntityDamageByEntityEventHandler
 import com.noahverkaik.utils.files.BasicFile
 import com.noahverkaik.utils.files.MessagesFile
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
-import java.lang.Exception
 import java.util.*
 
 class Bounties : JavaPlugin() {
@@ -21,11 +18,11 @@ class Bounties : JavaPlugin() {
     lateinit var tabPrefix: String
     lateinit var chatPrefix: String
 
-    var bountyType: Material = Material.DIAMOND
-    var bountyAmount: Int = 64
+    var bountiesEnabled = false
+
     var claimEvery: Long = 1800000
 
-    var bountiesEnabled = false
+    var bountyCommands: MutableList<String> = mutableListOf()
 
     val activeBounties: MutableList<UUID> = mutableListOf()
     val claimedBounties: HashMap<UUID, Long> = HashMap<UUID, Long>()
@@ -53,13 +50,7 @@ class Bounties : JavaPlugin() {
             logger.info("Loaded ${activeBounties.size} bounties and cleaned up temp.yml.")
         }
 
-        tabPrefix = langFile.loadMessage("player.bountied-prefix.tab").color().build()
-        chatPrefix = langFile.loadMessage("player.bountied-prefix.chat").color().build()
-
-        bountyType = Material.valueOf(config.getString("bounty-amount", "DIAMOND")!!)
-        bountyAmount = config.getInt("bounty-amount", 64)
-
-        claimEvery = config.getLong("claim-every", 1800000)
+        reloadSettings()
 
         Bukkit.getPluginCommand("addbounty")?.setExecutor(AddBountyCommand(this))
         Bukkit.getPluginCommand("startbounty")?.setExecutor(StartBountyCommand(this))
@@ -68,6 +59,14 @@ class Bounties : JavaPlugin() {
         BountyPlaceholderExpansion(this).register()
         server.pluginManager.registerEvents(BountyChatEventHandler(this), this)
         server.pluginManager.registerEvents(BountyEntityDamageByEntityEventHandler(this), this)
+    }
+
+    fun reloadSettings() {
+        claimEvery = config.getLong("claim-every", claimEvery)
+        bountyCommands.addAll(config.getStringList("commands"))
+
+        tabPrefix = langFile.loadMessage("player.bountied-prefix.tab").color().build()
+        chatPrefix = langFile.loadMessage("player.bountied-prefix.chat").color().build()
     }
 
     override fun onDisable() {
