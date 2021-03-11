@@ -2,14 +2,13 @@ package com.noahverkaik.bounties.events
 
 import com.noahverkaik.bounties.Bounties
 import com.noahverkaik.bounties.sendConfigMessage
-import com.noahverkaik.utils.ItemStackBuilder
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
-import java.util.AbstractMap
+import java.util.*
 
 class BountyEntityDamageByEntityEventHandler(private val main: Bounties) : Listener {
 
@@ -47,8 +46,11 @@ class BountyEntityDamageByEntityEventHandler(private val main: Bounties) : Liste
                             ).color().build()
                         )
 
-                        killer.inventory.addItem(ItemStackBuilder(main.bountyType).amount(main.bountyAmount).build()).forEach {
-                            killer.world.dropItem(killer.location, it.value)
+                        main.bountyCommands.forEach {
+                            main.server.dispatchCommand(
+                                Bukkit.getConsoleSender(),
+                                it.replace("%player%", killer.name).replace("%target%", target.name)
+                            )
                         }
 
                         main.claimedBounties[killer.uniqueId] = System.currentTimeMillis()
